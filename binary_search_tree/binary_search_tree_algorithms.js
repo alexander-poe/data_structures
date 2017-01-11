@@ -267,3 +267,218 @@ newTree.insert(1, 'ok');
 // isbtree(newTree);
 
 
+//has a key, value, parent, left and right
+//the lower value should always be on the left 
+//if key less then assigned to the left
+
+
+// var BinarySearchTree = function(key, value, parent) {
+//     this.key = key || null;
+//     this.value = value || null;
+//     this.parent = parent || null;
+//     this.left = null;
+//     this.right = null;
+// };
+
+// var newTree = new BinarySearchTree(1, 'hi')
+
+
+// BinarySearchTree.prototype.insert = function(key, value) {
+//     if (this.key == null) {
+//         this.key = key;
+//         this.value = value;
+//     }
+//     else if (key < this.key) {
+//         if (this.left == null) {
+//             this.left = new BinarySearchTree(key, value, this);
+//         }
+//         else {
+//             this.left.insert(key, value);
+//         }
+//     }
+//     else {
+//         if (this.right == null) {
+//             this.right = new BinarySearchTree(key, value, this);
+//         }
+//         else {
+//             this.right.insert(key, value);
+//         }
+//     }
+// };
+
+// BinarySearchTree.prototype.get = function(key) {
+//     if (this.key == key) {
+//         return this.value;
+//     }
+//     else if (key < this.key && this.left) {
+//         return this.left.get(key);
+//     }
+//     else if (key > this.key && this.right) {
+//         return this.right.get(key);
+//     }
+//     else {
+//         throw new Error('Key Error');
+//     }
+// };
+
+// BinarySearchTree.prototype.remove = function(key) {
+//     if (this.key == key) {
+//         if (this.left && this.right) {
+//             var successor = this.right._findMin();
+//             this.key = successor.key;
+//             this.value = successor.value;
+//             successor.remove(successor.key);
+//         }
+//         else if (this.left) {
+//             this._replaceWith(this.left);
+//         }
+//         else if (this.right) {
+//             this._replaceWith(this.right);
+//         }
+//         else {
+//             this._replaceWith(null);
+//         }
+//     }
+//     else if (key < this.key && this.left) {
+//         this.left.remove(key);
+//     }
+//     else if (key > this.key && this.right) {
+//         this.right.remove(key);
+//     }
+//     else {
+//         throw new Error('Key Error');
+//     }
+// };
+
+// BinarySearchTree.prototype._replaceWith = function(node) {
+//     if (this.parent) {
+//         if (this == this.parent.left) {
+//             this.parent.left = node;
+//         }
+//         else if (this == this.parent.right) {
+//             this.parent.right = node;
+//         }
+
+//         if (node) {
+//             node.parent = this.parent;
+//         }
+//     }
+//     else {
+//         if (node) {
+//             this.key = node.key;
+//             this.value = node.value;
+//             this.left = node.left;
+//             this.right = node.right;
+//         }
+//         else {
+//             this.key = null;
+//             this.value = null;
+//             this.left = null;
+//             this.right = null;
+//         }
+//     }
+// };
+
+// BinarySearchTree.prototype._findMin = function() {
+//     if (!this.left) {
+//       console.log(this.left)
+//         return this;
+//     }
+//     console.log(this.left)
+//     return this.left._findMin();
+// };
+
+
+// function print_tree(tree, depth) {
+//     if (!depth) {
+//         console.log("" + tree.key);
+//         depth = 0;
+//     }
+//     depth += 1;
+//     if (tree.left) {
+//         console.log(" ".repeat(depth) + "<" + tree.left.key);
+//         print_tree(tree.left, depth);
+//     }
+//     if (tree.right) {
+//         console.log(" ".repeat(depth) + ">" + tree.right.key);
+//         print_tree(tree.right, depth);
+//     }
+// }
+
+// //Write an algorithm to check whether an arbitrary tree is a binary search tree
+// function is_bst(tree) {
+//     //This is a bit sloppy; a non-binary tree won't have "left" and "right"
+//     //attributes, yet we attempt to prove that it is indeed binary. Whatever.
+//     if (tree.children > 2) return false;
+//     if (tree.left) {
+//         if (tree.left.key > tree.key) return false;
+//         if (!is_bst(tree.left)) return false;
+//     }
+//     if (tree.right) {
+//         if (tree.right.key < tree.key) return false;
+//         if (!is_bst(tree.right)) return false;
+//     }
+//     return true;
+// }
+
+
+////ROSUAV'S version
+// //More strict version of the above: a tree must have all its keys within bounds
+// //(either bound may be 'undefined' if there is no such bound).
+// //Assumes you're working with a binary tree, because let's face it, it makes
+// //no sense to ask if an integer is a BST.
+// function is_bst(tree, minimum, maximum) {
+//     if (minimum !== undefined && tree.key < minimum) return false;
+//     if (maximum !== undefined && tree.key > maximum) return false;
+//     if (tree.left  && !is_bst(tree.left , minimum, tree.key)) return false;
+//     if (tree.right && !is_bst(tree.right, tree.key, maximum)) return false;
+//     return true;
+// }
+
+// //Write an algorithm to find the height of a binary search tree
+// function bst_height(tree) {
+//     return Math.max(tree.left && bst_height(tree.left),
+//         tree.right && bst_height(tree.right)) + 1;
+// }
+
+// //Write an algorithm to find the third largest value in a binary search tree
+// //CJA 20160822: Assuming that this means the third largest *key*.
+
+// function nth_largest(tree, state) {
+//     //Finding the largest node means traversing the right first.
+//     //Normally, you'll traverse a tree left-to-right.
+//     if (tree.right) {
+//         nth_largest(tree.right, state);
+//         if (state.result) return;
+//     }
+//     if (!--state.n) {
+//         //Found it.
+//         state.result = tree.key;
+//         return;
+//     }
+//     if (tree.left) nth_largest(tree.left, state);
+// }
+
+// function third_largest(tree) {
+//     //Special case: empty tree.
+//     if (tree.key == null) return null;
+//     var state = {n: 3, result: null};
+//     nth_largest(tree, state);
+//     return state.result;
+// }
+
+
+// newTree.insert(8, 'helldo')
+// newTree.insert(87, 'apples')
+// newTree.insert(44, 'oranges')
+// newTree.insert(5, 'bananas')
+// newTree.insert(4, 'kantanas')
+// newTree.insert(3, 'forfantas')
+// newTree.insert(2, 'nice hannah')
+
+// console.log(newTree)
+// third_largest(newTree)
+
+
+
+
